@@ -21,7 +21,9 @@ setup(
     entry_points={
         'console_scripts': [
             'day1 = hundred_days.day1_pub:main',
-            'day1_sub = hundred_days.day1_sub:main'
+            'day1_sub = hundred_days.day1_sub:main',
+            'day2_server = hundred_days.day2_server:main',
+            'chamelon = hundred_days.turtlesim_color:main'
         ],
     },
 )
