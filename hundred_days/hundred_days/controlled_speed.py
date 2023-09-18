@@ -1,6 +1,8 @@
 import rclpy 
 from rclpy.node import Node
 from geometry_msgs.msg import Twist 
+from turtlesim.msg import Pose
+
 import time
 
 class SpeedController(Node):
@@ -15,6 +17,7 @@ class SpeedController(Node):
         self.initial_time=time.time()
         self.timer=self.create_timer(timer_period,self.speed)
         self.counter=0
+        self.position_sub=self.create_subscription(Pose,'/turtle1/pose',self.pose_callback,10)
         
     def speed(self):
         msg=Twist()
@@ -31,7 +34,7 @@ class SpeedController(Node):
         if (distance_travelled > 3.0):
             msg.linear.x=0.0
             
-            msg.angular.z=0.0 
+            msg.angular.z=0.3
             self.pub.publish(msg)
             self.get_logger().fatal("STOPPED")
             rclpy.shutdown()
@@ -42,6 +45,11 @@ class SpeedController(Node):
         self.pub.publish(msg)
             
         self.counter+=1
+        
+    def pose_callback(self,msg):
+        self.get_logger().info("TURTLE POSITION \n X:{0} \t Y:{1} \t Z:{2}".format(msg.x,msg.y,msg.theta))
+        
+        
 def main():
     rclpy.init(args=None)
     Controller=SpeedController()
